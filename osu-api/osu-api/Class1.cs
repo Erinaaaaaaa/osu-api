@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace osu_api
 {
-    public class Class1
+    public class osuApi
     {
+        /// <summary>
+        /// Retrieve general beatmap information.
+        /// </summary>
+        static void get_beatmaps() // insert type here
+        {
+            return; // insert code here
+        }
     }
 }
