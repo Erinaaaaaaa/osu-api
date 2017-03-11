@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace osu_api.Models
 {
-    class Beatmap
+    public class Beatmap
     {
         // variables
         
