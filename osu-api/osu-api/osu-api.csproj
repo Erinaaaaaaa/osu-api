@@ -50,6 +50,10 @@
   <ItemGroup>
     <Compile Include="Models\Beatmap.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\MPGame.cs" />
+    <Compile Include="Models\MPMatch.cs" />
+    <Compile Include="Models\MPMetadata.cs" />
+    <Compile Include="Models\MPScore.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="OsuApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -465,5 +465,53 @@ namespace osu_api
         }
 
         #endregion
+
+        #region /get_match
+
+        /// <summary>
+        /// Retrieves match info for the specified ID.
+        /// </summary>
+        /// <param name="match_id">Match ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <returns>Returns a MPMatch object if successfull, null otherwise.</returns>
+        public static MPMatch GetMatch(int match_id, string api_key)
+        {
+            try
+            {
+                var resp =
+                    new System.Net.WebClient().DownloadString(
+                        $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
+                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
+                return mpgame;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves match info for the specified ID.
+        /// </summary>
+        /// <param name="match_id">Match ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <returns>Returns a MPMatch object if successfull, null otherwise.</returns>
+        public static async Task<MPMatch> GetMatchAsync(int match_id, string api_key)
+        {
+            try
+            {
+                var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                        $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
+                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
+                return mpgame;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
