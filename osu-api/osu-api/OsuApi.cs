@@ -466,6 +466,110 @@ namespace osu_api
 
         #endregion
 
+        #region /get_scores
+
+        /// <summary>
+        /// Retrieves the scoreboard for a map, eventually for a specific user or mods.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="user_id">User ID.</param>
+        /// <param name="mods">Mods.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static List<Score> GetScoreboard(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
+        {
+            try
+            {
+                var resp =
+                    new System.Net.WebClient().DownloadString(
+                        $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the scoreboard for a map, eventually for a specific user or mods.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="user_id">User ID.</param>
+        /// <param name="mods">Mods.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
+        {
+            try
+            {
+                var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                        $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the scoreboard for a map, eventually for a specific user or mods.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="username">Username.</param>
+        /// <param name="mods">Mods.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static List<Score> GetScoreboard(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
+        {
+            try
+            {
+                var resp =
+                    new System.Net.WebClient().DownloadString(
+                        $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the scoreboard for a map, eventually for a specific user or mods.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="username">Username.</param>
+        /// <param name="mods">Mods.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
+        {
+            try
+            {
+                var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                        $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
         #region /get_match
 
         /// <summary>
