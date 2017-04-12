@@ -1,4 +1,11 @@
 # osu-api
 .NET DLL library to use the osu! public api in .NET programs
 
-Well, that's what i'm planning to do. This is more or less dropped, actually. Drop an issue or ping me (Jeremiidesu on osu) if interest arise.
+## Current status
+I'm working on it, as I (or friends) need to use the API.
+
+### Current features
+* /get_users
+* /get_beatmaps
+* /get_scores
+* /get_match
