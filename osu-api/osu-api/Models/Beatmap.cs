@@ -64,7 +64,7 @@ namespace osu_api.Models
         [JsonProperty(PropertyName = "passcount")]
         public int Passcount;
         [JsonProperty(PropertyName = "max_combo")]
-        public int MaxCombo;
+        public int? MaxCombo;
 
         // constructors
         public Beatmap() { }
