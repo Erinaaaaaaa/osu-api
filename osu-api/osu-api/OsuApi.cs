@@ -587,7 +587,7 @@ namespace osu_api
             {
                 var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_best?type=id&u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
+                    $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
             }
@@ -612,7 +612,7 @@ namespace osu_api
             {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_user_best?type=id&u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
+                        $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
             }
@@ -637,7 +637,7 @@ namespace osu_api
             {
                 var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_best?type=id&u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
+                    $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
             }
@@ -662,7 +662,7 @@ namespace osu_api
             {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_user_best?type=id&u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
+                        $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
             }
