@@ -14,7 +14,7 @@ namespace osu_api.Models
         [JsonProperty(PropertyName = "approved")]
         public int Approved; // 4 = loved, 3 = qualified, 2 = approved, 1 = ranked, 0 = pending, -1 = WIP, -2 = graveyard
         [JsonProperty(PropertyName = "approved_date")]
-        public DateTime ApprovedDate;
+        public DateTime? ApprovedDate;
         [JsonProperty(PropertyName = "last_update")]
         public DateTime LastUpdate;
         [JsonProperty(PropertyName = "artist")]
@@ -24,7 +24,7 @@ namespace osu_api.Models
         [JsonProperty(PropertyName = "beatmapset_id")]
         public int MapsetID;
         [JsonProperty(PropertyName = "bpm")]
-        public int BPM;
+        public decimal BPM;
         [JsonProperty(PropertyName = "creator")]
         public string Mapper; 
         [JsonProperty(PropertyName = "difficultyrating")]
