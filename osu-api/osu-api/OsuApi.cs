@@ -675,6 +675,107 @@ namespace osu_api
 
         #endregion
 
+        #region /get_user_recent
+        /// <summary>
+        /// Retrieves the top scores for a player. Defaults to 10.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="username">Username.</param>
+        /// <param name="mode">Gamemode to retrieve scores from.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static List<UserScore> GetUserRecentPlaysByUsername(string api_key, string username, int? mode = null, int limit = 10)
+        {
+            try
+            {
+                var resp =
+                    new System.Net.WebClient().DownloadString(
+                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the top scores for a player. Defaults to 10.
+        /// </summary>
+        /// <param name="beatmap_id">Map ID.</param>
+        /// <param name="api_key">API key.</param>
+        /// <param name="username">Username.</param>
+        /// <param name="mode">Gamemode to retrieve scores from.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static async Task<List<UserScore>> GetUserRecentPlaysByUsernameAsync(string api_key, string username, int? mode = null, int limit = 10)
+        {
+            try
+            {
+                var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the recent plays for a user.
+        /// </summary>
+        /// <param name="api_key">API key.</param>
+        /// <param name="user_id">User ID.</param>
+        /// <param name="mode">Gamemode to retrieve scores from.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static List<UserPlay> GetUserRecentPlaysByUserID(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        {
+            try
+            {
+                var resp =
+                    new System.Net.WebClient().DownloadString(
+                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
+                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the recent plays for a user.
+        /// </summary>
+        /// <param name="api_key">API key.</param>
+        /// <param name="user_id">User ID.</param>
+        /// <param name="mode">Gamemode to retrieve scores from.</param>
+        /// <param name="limit">Limit (range: 1-100)</param>
+        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        public static async Task<List<UserPlay>> GetUserRecentPlaysByUserIDAsync(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        {
+            try
+            {
+                var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
+                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
+                return scores;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
         #region /get_match
 
         /// <summary>
