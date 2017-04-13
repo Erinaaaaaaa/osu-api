@@ -9,4 +9,5 @@ I'm working on it, as I (or friends) need to use the API.
 * /get_beatmaps
 * /get_scores
 * /get_user_best
+* /get_user_recent
 * /get_match
