@@ -2,7 +2,7 @@
 .NET DLL library to use the osu! public api in .NET programs
 
 ## Current status
-I'm working on it, as I (or friends) need to use the API.
+Version 1.0 done! Will release asap.
 
 ### Current features
 * /get_user
