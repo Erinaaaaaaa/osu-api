@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using osu_api.Models;
+using OtakuOverclocks.Utils.Models;
 using Newtonsoft.Json;
 using System.Globalization;
 using Newtonsoft.Json.Converters;
 
-namespace osu_api
+namespace OtakuOverclocks.Utils
 {
     public class OsuApi
     {

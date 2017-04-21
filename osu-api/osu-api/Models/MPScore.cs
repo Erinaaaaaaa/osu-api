@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace osu_api.Models
+namespace OtakuOverclocks.Utils.Models
 {
     public class MPScore
     {
