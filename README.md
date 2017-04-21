@@ -3,10 +3,9 @@
 
 ## Current status
 I'm working on it, as I (or friends) need to use the API.
-I'll release a compiled DLL once every feature from the API is programmed in.
 
 ### Current features
-* /get_users
+* /get_user
 * /get_beatmaps
 * /get_scores
 * /get_user_best
