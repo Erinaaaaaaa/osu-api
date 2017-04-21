@@ -24,20 +24,16 @@ namespace osu_api
         /// <param name="api_key">Your osu! API key.</param>
         /// <param name="gamemode">Gamemode. Defaults to Standard</param>
         /// <param name="event_days">Days of events to return (between 1 and 31). Defaults to 1.</param>
-        /// <returns>Returns an user object with the userdata if successful, null otherwise.</returns>
+        /// <returns>Returns an user object with the userdata.</returns>
         public static User GetUser(int user_id, string api_key, int gamemode = 0, int event_days = 1)
         {
-            try {
+            
                 var resp =
                     new System.Net.WebClient().DownloadString(
                         $"https://osu.ppy.sh/api/get_user?type=id&u={user_id}&m={gamemode}&k={api_key}&event_days={event_days}");
                 var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
                 return users[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            
         }
 
         /// <summary>
@@ -47,21 +43,15 @@ namespace osu_api
         /// <param name="api_key">Your osu! API key.</param>
         /// <param name="gamemode">Gamemode. Defaults to Standard</param>
         /// <param name="event_days">Days of events to return (between 1 and 31). Defaults to 1.</param>
-        /// <returns>Returns an user object with the userdata if successful, null otherwise.</returns>
+        /// <returns>Returns an user object with the userdata.</returns>
         public static async Task<User> GetUserAsync(int user_id, string api_key, int gamemode = 0, int event_days = 1)
         {
-            try
-            {
+           
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_user?type=id&u={user_id}&m={gamemode}&k={api_key}&event_days={event_days}");
                 var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
                 return users[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -71,20 +61,13 @@ namespace osu_api
         /// <param name="api_key">Your osu! API key.</param>
         /// <param name="gamemode">Gamemode. Defaults to Standard</param>
         /// <param name="event_days">Days of event to return.</param>
-        /// <returns>Returns an user object with the userdata if successful, null otherwise.</returns>
+        /// <returns>Returns an user object with the userdata.</returns>
         public static User GetUser(string username, string api_key, int gamemode = 0, int event_days = 1)
         {
-            try
-            {
                 var resp =
                    new System.Net.WebClient().DownloadString($"https://osu.ppy.sh/api/get_user?type=string&u={username}&m={gamemode}&k={api_key}&event_days={event_days}");
                 var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
                 return users[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -94,20 +77,13 @@ namespace osu_api
         /// <param name="api_key">Your osu! API key.</param>
         /// <param name="gamemode">Gamemode. Defaults to Standard</param>
         /// <param name="event_days">Days of event to return.</param>
-        /// <returns>Returns an user object with the userdata if successful, null otherwise.</returns>
+        /// <returns>Returns an user object with the userdata.</returns>
         public static async Task<User> GetUserAsync(string username, string api_key, int gamemode = 0, int event_days = 1)
         {
-            try
-            {
                 var resp =
                    await new System.Net.Http.HttpClient().GetStringAsync($"https://osu.ppy.sh/api/get_user?type=string&u={username}&m={gamemode}&k={api_key}&event_days={event_days}");
                 var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
                 return users[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion
@@ -122,21 +98,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a Beatmap obejct if successful, null otherwise.</returns>
+        /// <returns>Returns a Beatmap obejct.</returns>
         public static Beatmap GetBeatmapFromHash(string md5Hash, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -147,21 +116,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a Beatmap obejct if successful, null otherwise.</returns>
+        /// <returns>Returns a Beatmap obejct.</returns>
         public static async Task<Beatmap> GetBeatmapFromHashAsync(string md5Hash, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -172,21 +134,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static List<Beatmap> GetBeatmapsFromSetID(int beatmapset_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -197,21 +152,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static async Task<List<Beatmap>> GetBeatmapsFromSetIDAsync(int beatmapset_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -222,21 +170,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a Beatmap obejct if successful, null otherwise.</returns>
+        /// <returns>Returns a Beatmap obejct.</returns>
         public static Beatmap GetBeatmapFromMapID(int beatmap_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -247,21 +188,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a Beatmap obejct if successful, null otherwise.</returns>
+        /// <returns>Returns a Beatmap obejct.</returns>
         public static async Task<Beatmap> GetBeatmapFromMapIDAsync(int beatmap_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps[0];
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -272,21 +206,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static List<Beatmap> GetBeatmapsFromUser(int user_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -297,21 +224,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(int user_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -322,21 +242,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static List<Beatmap> GetBeatmapsFromUser(string username, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -347,21 +260,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(string username, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -372,21 +278,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static List<Beatmap> GetBeatmapsFromUser(User user, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -397,21 +296,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(User user, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -422,21 +314,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static List<Beatmap> GetRankedBeatmapsSince(DateTime time, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         new System.Net.WebClient().DownloadString(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -447,21 +332,14 @@ namespace osu_api
         /// <param name="autoconverts">Whether to show autoconverts or not.</param>
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
-        /// <returns>Returns a list of Beatmap obejcts if successful, null otherwise.</returns>
+        /// <returns>Returns a list of Beatmap obejcts.</returns>
         public static async Task<List<Beatmap>> GetRankedBeatmapsSinceAsync(DateTime time, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
         {
-            try
-            {
                 var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
                             $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
                 var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
                 return beatmaps;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion
@@ -476,21 +354,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mods">Mods.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static List<Score> GetScoreboard(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                         $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
                 var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -501,21 +372,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mods">Mods.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
                 var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         ///// <summary>
@@ -526,21 +390,14 @@ namespace osu_api
         ///// <param name="username">Username.</param>
         ///// <param name="mods">Mods.</param>
         ///// <param name="limit">Limit (range: 1-100)</param>
-        ///// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        ///// <returns>Returns a list of Score objects.</returns>
         //public static List<Score> GetScoreboard(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
         //{
-        //    try
-        //    {
         //        var resp =
         //            new System.Net.WebClient().DownloadString(
         //                $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
         //        var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
         //        return scores;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
         //}
 
         ///// <summary>
@@ -551,21 +408,14 @@ namespace osu_api
         ///// <param name="username">Username.</param>
         ///// <param name="mods">Mods.</param>
         ///// <param name="limit">Limit (range: 1-100)</param>
-        ///// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        ///// <returns>Returns a list of Score objects.</returns>
         //public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
         //{
-        //    try
-        //    {
         //        var resp =
         //            await new System.Net.Http.HttpClient().GetStringAsync(
         //                $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
         //        var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
         //        return scores;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
         //}
 
         #endregion
@@ -580,21 +430,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static List<UserScore> GetUserPerformanceByUserID(string api_key, int? user_id = null, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                     $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -605,21 +448,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserScore>> GetUserPerformanceByUserIDAsync(string api_key, int? user_id = null, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -630,21 +466,14 @@ namespace osu_api
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static List<UserScore> GetUserPerformanceByUsername(string api_key, string username, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                     $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -655,21 +484,14 @@ namespace osu_api
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserScore>> GetUserPerformanceByUsernameAsync(string api_key, string username, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
 
@@ -684,21 +506,14 @@ namespace osu_api
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static List<UserScore> GetUserRecentPlaysByUsername(string api_key, string username, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                     $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -709,21 +524,14 @@ namespace osu_api
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserScore>> GetUserRecentPlaysByUsernameAsync(string api_key, string username, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                     $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
                 var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -733,21 +541,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static List<UserPlay> GetUserRecentPlaysByUserID(string api_key, int? user_id = null, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                     $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -757,21 +558,14 @@ namespace osu_api
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
-        /// <returns>Returns a list of Score objects if successfull, null otherwise.</returns>
+        /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserPlay>> GetUserRecentPlaysByUserIDAsync(string api_key, int? user_id = null, int? mode = null, int limit = 10)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                     $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
                 var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
                 return scores;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion
@@ -783,21 +577,14 @@ namespace osu_api
         /// </summary>
         /// <param name="match_id">Match ID.</param>
         /// <param name="api_key">API key.</param>
-        /// <returns>Returns a MPMatch object if successfull, null otherwise.</returns>
+        /// <returns>Returns a MPMatch object.</returns>
         public static MPMatch GetMatch(int match_id, string api_key)
         {
-            try
-            {
                 var resp =
                     new System.Net.WebClient().DownloadString(
                         $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
                 var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
                 return mpgame;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         /// <summary>
@@ -805,21 +592,14 @@ namespace osu_api
         /// </summary>
         /// <param name="match_id">Match ID.</param>
         /// <param name="api_key">API key.</param>
-        /// <returns>Returns a MPMatch object if successfull, null otherwise.</returns>
+        /// <returns>Returns a MPMatch object.</returns>
         public static async Task<MPMatch> GetMatchAsync(int match_id, string api_key)
         {
-            try
-            {
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
                 var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
                 return mpgame;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion
