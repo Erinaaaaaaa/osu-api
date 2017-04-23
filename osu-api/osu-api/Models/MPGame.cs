@@ -12,9 +12,9 @@ namespace OtakuOverclocks.Utils.Models
         [JsonProperty(PropertyName = "game_id")]
         public int GameID;
         [JsonProperty(PropertyName = "start_time")]
-        public DateTime StartTime;
+        public DateTime? StartTime;
         [JsonProperty(PropertyName = "end_time")]
-        public DateTime EndTime;
+        public DateTime? EndTime;
         [JsonProperty(PropertyName = "beatmap_id")]
         public int BeatmapID;
         [JsonProperty(PropertyName = "play_mode")]
