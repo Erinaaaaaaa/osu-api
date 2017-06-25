@@ -15,5 +15,7 @@ namespace OtakuOverclocks.Utils.Models
         public string MatchName;
         [JsonProperty(PropertyName = "start_time")]
         public DateTime StartTime;
+        [JsonProperty(PropertyName = "end_time")]
+        public DateTime? EndTime;
     }
 }
