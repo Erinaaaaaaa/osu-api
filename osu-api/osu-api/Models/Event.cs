@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace OtakuOverclocks.Utils.Models
+namespace osu_api.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class Event
     {
         [JsonProperty(PropertyName = "display_html")]
-        public string DisplayHTML;
+        internal string DisplayHTML;
         [JsonProperty(PropertyName = "beatmap_id")]
         public int BeatmapID;
         [JsonProperty(PropertyName = "beatmapset_id")]

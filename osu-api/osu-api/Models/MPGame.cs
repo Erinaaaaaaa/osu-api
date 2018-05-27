@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace OtakuOverclocks.Utils.Models
+namespace osu_api.Models
 {
     public class MPGame
     {

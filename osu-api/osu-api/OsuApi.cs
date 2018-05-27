@@ -4,16 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OtakuOverclocks.Utils.Models;
+using osu_api.Models;
 using Newtonsoft.Json;
 using System.Globalization;
 using Newtonsoft.Json.Converters;
 
-namespace OtakuOverclocks.Utils
+namespace osu_api
 {
     public class OsuApi
     {
-        public static readonly IsoDateTimeConverter DATE_TIME_CONVERTER = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
+        public static readonly IsoDateTimeConverter DateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
 
         #region /get_user
 
@@ -27,12 +27,11 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns an user object with the userdata.</returns>
         public static User GetUser(int user_id, string api_key, int gamemode = 0, int event_days = 1)
         {
-            
-                var resp =
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                        $"https://osu.ppy.sh/api/get_user?type=id&u={user_id}&m={gamemode}&k={api_key}&event_days={event_days}");
-                var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
-                return users[0];
+                        $"https://osu.ppy.sh/api/get_user?type=id&u={user_id}&k={api_key}&m={gamemode}&event_days={event_days}");
+                var users = JsonConvert.DeserializeObject<List<User>>(resp, DateTimeConverter);
+                return users[0];    
             
         }
 
@@ -50,7 +49,7 @@ namespace OtakuOverclocks.Utils
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_user?type=id&u={user_id}&m={gamemode}&k={api_key}&event_days={event_days}");
-                var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
+                var users = JsonConvert.DeserializeObject<List<User>>(resp, DateTimeConverter);
                 return users[0];
         }
 
@@ -66,7 +65,7 @@ namespace OtakuOverclocks.Utils
         {
                 var resp =
                    new System.Net.WebClient().DownloadString($"https://osu.ppy.sh/api/get_user?type=string&u={username}&m={gamemode}&k={api_key}&event_days={event_days}");
-                var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
+                var users = JsonConvert.DeserializeObject<List<User>>(resp, DateTimeConverter);
                 return users[0];
         }
 
@@ -82,7 +81,7 @@ namespace OtakuOverclocks.Utils
         {
                 var resp =
                    await new System.Net.Http.HttpClient().GetStringAsync($"https://osu.ppy.sh/api/get_user?type=string&u={username}&m={gamemode}&k={api_key}&event_days={event_days}");
-                var users = JsonConvert.DeserializeObject<List<User>>(resp, DATE_TIME_CONVERTER);
+                var users = JsonConvert.DeserializeObject<List<User>>(resp, DateTimeConverter);
                 return users[0];
         }
 
@@ -99,13 +98,18 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a Beatmap obejct.</returns>
-        public static Beatmap GetBeatmapFromHash(string md5Hash, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static Beatmap GetBeatmapFromHash(string md5Hash, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
-                        new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
-                return beatmaps[0];
+            // &m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
+                    new System.Net.WebClient().DownloadString(
+                        $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}" + parameters);
+            var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
+            return beatmaps[0];
         }
 
         /// <summary>
@@ -117,13 +121,17 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a Beatmap obejct.</returns>
-        public static async Task<Beatmap> GetBeatmapFromHashAsync(string md5Hash, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<Beatmap> GetBeatmapFromHashAsync(string md5Hash, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
-                        await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
-                return beatmaps[0];
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
+                    await new System.Net.Http.HttpClient().GetStringAsync(
+                        $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&h={md5Hash}" + parameters);
+            var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
+            return beatmaps[0];
         }
 
         /// <summary>
@@ -135,12 +143,18 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static List<Beatmap> GetBeatmapsFromSetID(int beatmapset_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static List<Beatmap> GetBeatmapsFromSetID(int beatmapset_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            if (mode != null) parameters += $"&m={mode}";
+
                 var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -153,12 +167,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static async Task<List<Beatmap>> GetBeatmapsFromSetIDAsync(int beatmapset_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<List<Beatmap>> GetBeatmapsFromSetIDAsync(int beatmapset_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&s={beatmapset_id}" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -171,12 +189,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a Beatmap obejct.</returns>
-        public static Beatmap GetBeatmapFromMapID(int beatmap_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static Beatmap GetBeatmapFromMapID(int beatmap_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps[0];
         }
 
@@ -189,12 +211,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a Beatmap obejct.</returns>
-        public static async Task<Beatmap> GetBeatmapFromMapIDAsync(int beatmap_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<Beatmap> GetBeatmapFromMapIDAsync(int beatmap_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&b={beatmap_id}" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps[0];
         }
 
@@ -207,12 +233,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static List<Beatmap> GetBeatmapsFromUser(int user_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static List<Beatmap> GetBeatmapsFromUser(int user_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -225,12 +255,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(int user_id, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(int user_id, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user_id}&type=id" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -243,12 +277,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static List<Beatmap> GetBeatmapsFromUser(string username, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static List<Beatmap> GetBeatmapsFromUser(string username, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -261,12 +299,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(string username, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(string username, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={username}&type=string"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -279,12 +321,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static List<Beatmap> GetBeatmapsFromUser(User user, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static List<Beatmap> GetBeatmapsFromUser(User user, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id" + parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -297,12 +343,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(User user, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<List<Beatmap>> GetBeatmapFromUserAsync(User user, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&u={user.UserId}&type=id"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -315,12 +365,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static List<Beatmap> GetRankedBeatmapsSince(DateTime time, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static List<Beatmap> GetRankedBeatmapsSince(DateTime time, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         new System.Net.WebClient().DownloadString(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -333,12 +387,16 @@ namespace OtakuOverclocks.Utils
         /// <param name="limit">Maximum number of results. Range: 0-500</param>
         /// <param name="mode">Map gamemode.</param>
         /// <returns>Returns a list of Beatmap obejcts.</returns>
-        public static async Task<List<Beatmap>> GetRankedBeatmapsSinceAsync(DateTime time, string api_key, int? mode = null, bool autoconverts = false, int limit = 500)
+        public static async Task<List<Beatmap>> GetRankedBeatmapsSinceAsync(DateTime time, string api_key, int? mode = null, bool? autoconverts = null, int limit = 500)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (autoconverts != null) parameters += $"&a={Convert.ToInt32(autoconverts)}";
+            if (limit != 500) parameters += $"&limit={limit}";
+            var resp =
                         await new System.Net.Http.HttpClient().GetStringAsync(
-                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}&m={mode}&a={Convert.ToInt32(autoconverts)}&limit={limit}");
-                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DATE_TIME_CONVERTER);
+                            $"https://osu.ppy.sh/api/get_beatmaps?k={api_key}&since={time.ToString("yyyy - MM - dd HH: mm:ss")}"+parameters);
+                var beatmaps = JsonConvert.DeserializeObject<List<Beatmap>>(resp, DateTimeConverter);
                 return beatmaps;
         }
 
@@ -357,10 +415,14 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static List<Score> GetScoreboard(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
         {
-                var resp =
+            var parameters = "";
+            if (user_id != null) parameters += $"&u={user_id}&type=id";
+            if (mods != null) parameters += $"&mods={mods}";
+            if (limit != 50) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                        $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
-                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_scores?b={beatmap_id}&k={api_key}" + parameters);
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -375,10 +437,14 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, int? user_id = null, int? mods = null, int limit = 50)
         {
-                var resp =
+            var parameters = "";
+            if (user_id != null) parameters += $"&u={user_id}&type=id";
+            if (mods != null) parameters += $"&mods={mods}";
+            if (limit != 50) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_scores?type=id&u={user_id}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
-                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_scores?b={beatmap_id}&k={api_key}" + parameters);
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -393,10 +459,14 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static List<Score> GetScoreboard(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
         {
-                var resp =
+            var parameters = "";
+            if (username != null) parameters += $"&u={username}&type=string";
+            if (mods != null) parameters += $"&mods={mods}";
+            if (limit != 50) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                        $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
-                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_scores?b={beatmap_id}&k={api_key}"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -411,10 +481,14 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<Score>> GetScoreboardAsync(int beatmap_id, string api_key, string username = null, int? mods = null, int limit = 50)
         {
-                var resp =
+            var parameters = "";
+            if (username != null) parameters += $"&u={username}&type=string";
+            if (mods != null) parameters += $"&mods={mods}";
+            if (limit != 50) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_scores?type=string&u={username}&b={beatmap_id}&k={api_key}&mods={mods}&limit={limit}");
-                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_scores?b={beatmap_id}&k={api_key}"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<Score>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -425,43 +499,52 @@ namespace OtakuOverclocks.Utils
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
         /// <returns>Returns a list of Score objects.</returns>
-        public static List<UserScore> GetUserPerformanceByUserID(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        public static List<UserScore> GetUserPerformanceByUserID(string api_key, int user_id, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&type=id"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
+
+        //
+        // FIX BOTTOM METHODS THE SAME WAY AS ABOVE
+        //
+        //
+        //
 
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="user_id">User ID.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
         /// <returns>Returns a list of Score objects.</returns>
-        public static async Task<List<UserScore>> GetUserPerformanceByUserIDAsync(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        public static async Task<List<UserScore>> GetUserPerformanceByUserIDAsync(string api_key, int user_id, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_user_best?u={user_id}&k={api_key}&type=id"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
 
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
@@ -469,17 +552,19 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static List<UserScore> GetUserPerformanceByUsername(string api_key, string username, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&type=string"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
 
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
@@ -487,10 +572,13 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserScore>> GetUserPerformanceByUsernameAsync(string api_key, string username, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                        $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                        $"https://osu.ppy.sh/api/get_user_best?u={username}&k={api_key}&type=string"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -501,7 +589,6 @@ namespace OtakuOverclocks.Utils
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
@@ -509,17 +596,19 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static List<UserScore> GetUserRecentPlaysByUsername(string api_key, string username, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&type=string"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
 
         /// <summary>
         /// Retrieves the top scores for a player. Defaults to 10.
         /// </summary>
-        /// <param name="beatmap_id">Map ID.</param>
         /// <param name="api_key">API key.</param>
         /// <param name="username">Username.</param>
         /// <param name="mode">Gamemode to retrieve scores from.</param>
@@ -527,10 +616,13 @@ namespace OtakuOverclocks.Utils
         /// <returns>Returns a list of Score objects.</returns>
         public static async Task<List<UserScore>> GetUserRecentPlaysByUsernameAsync(string api_key, string username, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&m={mode}&limit={limit}&type=string");
-                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_recent?u={username}&k={api_key}&type=string"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserScore>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -542,12 +634,15 @@ namespace OtakuOverclocks.Utils
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
         /// <returns>Returns a list of Score objects.</returns>
-        public static List<UserPlay> GetUserRecentPlaysByUserID(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        public static List<UserPlay> GetUserRecentPlaysByUserID(string api_key, int user_id, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     new System.Net.WebClient().DownloadString(
-                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
-                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&type=id"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -559,12 +654,15 @@ namespace OtakuOverclocks.Utils
         /// <param name="mode">Gamemode to retrieve scores from.</param>
         /// <param name="limit">Limit (range: 1-100)</param>
         /// <returns>Returns a list of Score objects.</returns>
-        public static async Task<List<UserPlay>> GetUserRecentPlaysByUserIDAsync(string api_key, int? user_id = null, int? mode = null, int limit = 10)
+        public static async Task<List<UserPlay>> GetUserRecentPlaysByUserIDAsync(string api_key, int user_id, int? mode = null, int limit = 10)
         {
-                var resp =
+            var parameters = "";
+            if (mode != null) parameters += $"&m={mode}";
+            if (limit != 10) parameters += $"&limit={limit}";
+            var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
-                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&m={mode}&limit={limit}&type=id");
-                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DATE_TIME_CONVERTER);
+                    $"https://osu.ppy.sh/api/get_user_recent?u={user_id}&k={api_key}&type=id"+parameters);
+                var scores = JsonConvert.DeserializeObject<List<UserPlay>>(resp, DateTimeConverter);
                 return scores;
         }
 
@@ -583,7 +681,7 @@ namespace OtakuOverclocks.Utils
                 var resp =
                     new System.Net.WebClient().DownloadString(
                         $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
-                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
+                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DateTimeConverter);
                 return mpgame;
         }
 
@@ -598,7 +696,7 @@ namespace OtakuOverclocks.Utils
                 var resp =
                     await new System.Net.Http.HttpClient().GetStringAsync(
                         $"https://osu.ppy.sh/api/get_match?mp={match_id}&k={api_key}");
-                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DATE_TIME_CONVERTER);
+                var mpgame = JsonConvert.DeserializeObject<MPMatch>(resp, DateTimeConverter);
                 return mpgame;
         }
 

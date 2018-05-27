@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OtakuOverclocks.Utils.Models
+namespace osu_api.Models
 {
     public class UserScore
     {

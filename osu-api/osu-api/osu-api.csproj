@@ -56,6 +56,11 @@
     <Compile Include="Models\MPScore.cs" />
     <Compile Include="Models\Score.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserEvents\AchievementEvent.cs" />
+    <Compile Include="Models\UserEvents\FirstPlaceLostEvent.cs" />
+    <Compile Include="Models\UserEvents\MapRankedUpdateEvent.cs" />
+    <Compile Include="Models\UserEvents\MapScoreEvent.cs" />
+    <Compile Include="Models\UserEvents\MapUpdateEvent.cs" />
     <Compile Include="Models\UserPlay.cs" />
     <Compile Include="Models\UserScore.cs" />
     <Compile Include="OsuApi.cs" />
