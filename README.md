@@ -3,6 +3,7 @@
 
 ## Current status
 Version 1.0 done! Will release asap.
+UPDATE: it's broken af, fixing shit
 
 ### Current features
 * /get_user
