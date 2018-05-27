@@ -2,8 +2,7 @@
 .NET DLL library to use the osu! public api in .NET programs
 
 ## Current status
-Version 1.0 done! Will release asap.
-UPDATE: it's broken af, fixing shit
+Version 1.1 done! I'm not sure it contains everything the API posts as of today (May 27 2018) though.
 
 ### Current features
 * /get_user
@@ -13,5 +12,5 @@ UPDATE: it's broken af, fixing shit
 * /get_user_recent
 * /get_match
 
-## Note
-The solution is supposed to contain a Console app project. That's because I used a project of this kind to test the wrapper, so don't mind the error.
+## Changelog
+
