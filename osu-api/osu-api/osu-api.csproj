@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetBeatmaps.cs" />
+    <Compile Include="GetMatch.cs" />
+    <Compile Include="GetScores.cs" />
+    <Compile Include="GetUser.cs" />
+    <Compile Include="GetUserBest.cs" />
+    <Compile Include="GetUserRecent.cs" />
     <Compile Include="Models\Beatmap.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\MPGame.cs" />
@@ -63,7 +69,7 @@
     <Compile Include="Models\UserEvents\MapUpdateEvent.cs" />
     <Compile Include="Models\UserPlay.cs" />
     <Compile Include="Models\UserScore.cs" />
-    <Compile Include="OsuApi.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
